@@ -1,0 +1,5 @@
+rootProject.name = 'MinecraftServerNetwork'
+include 'NetworkProxy'
+include 'NetworkClient'
+include 'NetworkCommons'
+

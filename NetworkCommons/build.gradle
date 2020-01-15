@@ -1,0 +1,8 @@
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.lettuce:lettuce-core:5.2.0.RELEASE'
+    compile group: 'de.ruedigermoeller', name: 'fst', version: '2.57'
+}

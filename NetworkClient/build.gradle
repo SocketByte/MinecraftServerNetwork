@@ -1,0 +1,13 @@
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":NetworkCommons")
+
+    compileOnly group: 'org.bukkit', name: 'bukkit', version: '1.15.1-R0.1-SNAPSHOT'
+}
+
+tasks.withType(Jar) {
+    destinationDir = file("E:\\Sektory\\Center\\plugins")
+}
