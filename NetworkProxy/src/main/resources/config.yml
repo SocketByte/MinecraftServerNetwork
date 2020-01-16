@@ -1,0 +1,37 @@
+connectionPattern: "redis://password@localhost:6379/0"
+sectors:
+  center: # Same as in BungeeCord's config.yml file
+    min:
+      x: -250.0
+      z: -250.0
+    max:
+      x: 250.0
+      z: 250.0
+  north:
+    min:
+      x: -250.0
+      z: -2000.0
+    max:
+      x: 2000.0
+      z: -250.0
+  south:
+    min:
+      x: -2000.0
+      z: 250.0
+    max:
+      x: 250.0
+      z: 2000.0
+  east:
+    min:
+      x: 250.0
+      z: -250.0
+    max:
+      x: 2000.0
+      z: 2000.0
+  west:
+    min:
+      x: -2000.0
+      z: -2000.0
+    max:
+      x: -250.0
+      z: 250.0

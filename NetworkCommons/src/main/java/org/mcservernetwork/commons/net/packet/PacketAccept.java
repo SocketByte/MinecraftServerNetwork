@@ -1,11 +1,13 @@
 package org.mcservernetwork.commons.net.packet;
 
+import org.mcservernetwork.commons.net.Sector;
+
 import java.util.Map;
 
 public class PacketAccept extends Packet {
 
-    public int sectorId;
+    public String sectorName;
 
-    public Map<String, Object> configuration;
+    public Map<String, Sector> sectors;
 
 }

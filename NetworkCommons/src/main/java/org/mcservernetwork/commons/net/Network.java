@@ -16,7 +16,7 @@ public class Network {
     private final StatefulRedisPubSubConnection<String, Packet> pubSub;
     private final StatefulRedisConnection<String, Packet> connection;
 
-    private final Map<Integer, Sector> sectors = new HashMap<>();
+    private Map<String, Sector> sectors = new HashMap<>();
 
     public Network(String connectionPattern) {
         this.client = RedisClient.create(connectionPattern);
@@ -24,11 +24,15 @@ public class Network {
         this.connection = this.client.connect(codec);
     }
 
-    public void addSector(int id) {
-        this.sectors.put(id, new Sector(id));
+    public void applySectors(Map<String, Sector> sectors) {
+        this.sectors = sectors;
     }
 
-    public Map<Integer, Sector> getSectors() {
+    public void addSector(Sector sector) {
+        this.sectors.put(sector.getSectorName(), sector);
+    }
+
+    public Map<String, Sector> getSectors() {
         return Collections.unmodifiableMap(this.sectors);
     }
 

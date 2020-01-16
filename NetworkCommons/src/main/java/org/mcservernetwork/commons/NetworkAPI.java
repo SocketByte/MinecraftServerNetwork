@@ -12,16 +12,16 @@ import java.util.Map;
 public class NetworkAPI {
 
     public static class Sectors {
-        public static Map<Integer, Sector> getSectors() {
+        public static Map<String, Sector> getSectors() {
             return NetworkAPI.Internal.getNetwork().getSectors();
         }
 
-        public static Sector getSector(int id) {
-            return NetworkAPI.Internal.getNetwork().getSectors().get(id);
+        public static Sector getSector(String name) {
+            return NetworkAPI.Internal.getNetwork().getSectors().get(name);
         }
 
-        public static boolean isSectorAvailable(int id) {
-            return NetworkAPI.Internal.getNetwork().getSectors().containsKey(id);
+        public static boolean isSectorAvailable(String name) {
+            return NetworkAPI.Internal.getNetwork().getSectors().containsKey(name);
         }
     }
 
@@ -30,9 +30,21 @@ public class NetworkAPI {
             NetworkAPI.Internal.publishAsync(channel, packet);
         }
 
+        public static void publish(String channel, Packet packet) {
+            NetworkAPI.Internal.publishAsync(channel, packet);
+        }
+
+        public static void unsubscribe(Channel channel) {
+            NetworkAPI.Internal.getNetwork().pubSub().sync().unsubscribe(channel.name());
+        }
+
+        public static void unsubscribe(String channel) {
+            NetworkAPI.Internal.getNetwork().pubSub().sync().unsubscribe(channel);
+        }
+
         @SuppressWarnings("unchecked")
-        public static <T extends Packet> void subscribe(Channel channel, Class<T> type, Listener<T> listener) {
-            NetworkAPI.Internal.subscribe(channel, new RedisPubSubAdapter<String, Packet>() {
+        public static <T extends Packet> void subscribeAndListen(Channel channel, Class<T> type, Listener<T> listener) {
+            NetworkAPI.Internal.subscribeAndListen(channel, new RedisPubSubAdapter<String, Packet>() {
                 @Override
                 public void message(String ch, Packet message) {
                     if (!ch.equals(channel.toString()))
@@ -43,6 +55,33 @@ public class NetworkAPI {
                     listener.receive((T) message);
                 }
             });
+        }
+
+        @SuppressWarnings("unchecked")
+        public static <T extends Packet> void listen(String channel, Class<T> type, Listener<T> listener) {
+            NetworkAPI.Internal.listen(new RedisPubSubAdapter<String, Packet>() {
+                @Override
+                public void message(String ch, Packet message) {
+                    if (!ch.equals(channel))
+                        return;
+                    if (!type.isAssignableFrom(message.getClass()))
+                        return;
+
+                    listener.receive((T) message);
+                }
+            });
+        }
+
+        public static <T extends Packet> void listen(Channel channel, Class<T> type, Listener<T> listener) {
+            listen(channel.name(), type, listener);
+        }
+
+        public static void subscribe(Channel channel) {
+            NetworkAPI.Internal.getNetwork().pubSub().sync().subscribe(channel.name());
+        }
+
+        public static void subscribe(String channel) {
+            NetworkAPI.Internal.getNetwork().pubSub().sync().subscribe(channel);
         }
 
         public interface Listener<T extends Packet> {
@@ -57,8 +96,12 @@ public class NetworkAPI {
             return network;
         }
 
-        public static void addSector(int sectorId) {
-            network.addSector(sectorId);
+        public static void addSector(Sector sector) {
+            network.addSector(sector);
+        }
+
+        public static void applySectors(Map<String, Sector> sectors) {
+            network.applySectors(sectors);
         }
 
         public static void publishAsync(Channel channel, Packet packet) {
@@ -77,12 +120,16 @@ public class NetworkAPI {
             network.connection().sync().publish(channel, packet);
         }
 
-        public static void subscribe(Channel channel, RedisPubSubAdapter<String, Packet> adapter) {
+        public static void listen(RedisPubSubAdapter<String, Packet> adapter) {
+            network.pubSub().addListener(adapter);
+        }
+
+        public static void subscribeAndListen(Channel channel, RedisPubSubAdapter<String, Packet> adapter) {
             network.pubSub().addListener(adapter);
             network.pubSub().sync().subscribe(channel.name());
         }
 
-        public static void subscribe(String channel, RedisPubSubAdapter<String, Packet> adapter) {
+        public static void subscribeAndListen(String channel, RedisPubSubAdapter<String, Packet> adapter) {
             network.pubSub().addListener(adapter);
             network.pubSub().sync().subscribe(channel);
         }

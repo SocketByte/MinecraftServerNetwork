@@ -1,55 +1,53 @@
 package org.mcservernetwork.commons.net;
 
-public class Sector {
+import java.io.Serializable;
 
-    private int sectorId;
+public class Sector implements Serializable {
 
-    private int minX;
-    private int maxX;
-    private int minZ;
-    private int maxZ;
+    private final String sectorName;
 
-    public Sector(int sectorId) {
-        this.sectorId = sectorId;
+    private double minX;
+    private double maxX;
+    private double minZ;
+    private double maxZ;
+
+    public Sector(String sectorName) {
+        this.sectorName = sectorName;
     }
 
-    public int getSectorId() {
-        return sectorId;
+    public String getSectorName() {
+        return sectorName;
     }
 
-    public void setSectorId(int sectorId) {
-        this.sectorId = sectorId;
-    }
-
-    public int getMinX() {
+    public double getMinX() {
         return minX;
     }
 
-    public void setMinX(int minX) {
+    public void setMinX(double minX) {
         this.minX = minX;
     }
 
-    public int getMaxX() {
+    public double getMaxX() {
         return maxX;
     }
 
-    public void setMaxX(int maxX) {
+    public void setMaxX(double maxX) {
         this.maxX = maxX;
     }
 
-    public int getMinZ() {
+    public double getMinZ() {
         return minZ;
     }
 
-    public void setMinZ(int minZ) {
+    public void setMinZ(double minZ) {
         this.minZ = minZ;
     }
 
-    public int getMaxZ() {
+    public double getMaxZ() {
         return maxZ;
     }
 
-    public void setMaxZ(int maxZ) {
+    public void setMaxZ(double maxZ) {
         this.maxZ = maxZ;
     }
 }

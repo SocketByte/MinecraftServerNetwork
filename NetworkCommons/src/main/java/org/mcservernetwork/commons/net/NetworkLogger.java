@@ -16,7 +16,7 @@ public class NetworkLogger {
     }
 
     public void listen() {
-        NetworkAPI.Net.subscribe(Channel.LOGGER, PacketLog.class, packet -> {
+        NetworkAPI.Net.subscribeAndListen(Channel.LOGGER, PacketLog.class, packet -> {
             System.out.println("[" + packet.sender + "] (" + packet.severity + ") " + packet.message);
         });
     }

@@ -8,6 +8,27 @@ dependencies {
     compileOnly group: 'org.bukkit', name: 'bukkit', version: '1.15.1-R0.1-SNAPSHOT'
 }
 
-tasks.withType(Jar) {
-    destinationDir = file("E:\\Sektory\\Center\\plugins")
+task copyJar {
+    doLast {
+        copy {
+            from "$projectDir\\build\\libs\\NetworkClient-1.0.jar"
+            into "E:\\Sektory\\Center\\plugins"
+        }
+        copy {
+            from "$projectDir\\build\\libs\\NetworkClient-1.0.jar"
+            into "E:\\Sektory\\North\\plugins"
+        }
+        copy {
+            from "$projectDir\\build\\libs\\NetworkClient-1.0.jar"
+            into "E:\\Sektory\\South\\plugins"
+        }
+        copy {
+            from "$projectDir\\build\\libs\\NetworkClient-1.0.jar"
+            into "E:\\Sektory\\East\\plugins"
+        }
+        copy {
+            from "$projectDir\\build\\libs\\NetworkClient-1.0.jar"
+            into "E:\\Sektory\\West\\plugins"
+        }
+    }
 }

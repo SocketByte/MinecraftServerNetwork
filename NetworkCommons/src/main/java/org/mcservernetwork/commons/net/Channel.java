@@ -1,8 +1,13 @@
 package org.mcservernetwork.commons.net;
 
 public enum Channel {
-    TRANSFER, PROXY, LOGGER, TELEPORT, ACCEPT, VERIFY;
-    public static String SECTOR(int id) {
-        return "SECTOR:" + id;
+    TRANSFER_REQUEST, TRANSFER_ACCEPT,
+    PROXY,
+    LOGGER,
+    TELEPORT,
+    PING, PONG,
+    VERIFY;
+    public static String SECTOR(String name) {
+        return "SECTOR:" + name;
     }
 }
