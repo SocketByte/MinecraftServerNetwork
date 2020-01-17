@@ -2,10 +2,12 @@ package org.mcservernetwork.client;
 
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcservernetwork.client.command.TestCommand;
 import org.mcservernetwork.client.listener.StatusListener;
 import org.mcservernetwork.client.listener.TransferAcceptListener;
+import org.mcservernetwork.client.listener.bukkit.PlayerJoinListener;
 import org.mcservernetwork.client.listener.bukkit.PlayerMoveListener;
 import org.mcservernetwork.client.task.BorderTask;
 import org.mcservernetwork.commons.NetworkAPI;
@@ -54,6 +56,7 @@ public class Client extends JavaPlugin {
         getCommand("test").setExecutor(new TestCommand());
 
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
 
         NetworkAPI.Net.subscribeAndListen(Channel.PING, PacketPingPong.class, new StatusListener());
         NetworkAPI.Net.listen(Channel.SECTOR(sectorName), PacketTransfer.class, new TransferAcceptListener());
@@ -61,14 +64,12 @@ public class Client extends JavaPlugin {
 
     public void accept() {
         CountDownLatch latch = new CountDownLatch(1);
-        System.out.println(Channel.SECTOR(sectorName));
         NetworkAPI.Net.listen(Channel.SECTOR(sectorName), PacketAccept.class, packet -> {
             NetworkAPI.Internal.applySectors(packet.sectors);
             System.out.println("Proxy accepted the sector.");
             System.out.println("Connecting to network logger...");
             logger = new NetworkLogger("SECTOR:" + packet.sectorName);
             logger.log("Connected and ready.", NetworkLogger.LogSeverity.INFO);
-            sectorName = packet.sectorName;
             latch.countDown();
         });
 
@@ -92,7 +93,7 @@ public class Client extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for (BossBar bar : PlayerMoveListener.bossBars.values()) {
+        for (BossBar bar : PlayerMoveListener.BOSSBARS.values()) {
             bar.removeAll();
         }
         service.shutdown();

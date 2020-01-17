@@ -1,6 +1,7 @@
 package org.mcservernetwork.commons.net.packet;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 public class PacketPlayerInfo extends Packet {
@@ -56,11 +57,63 @@ public class PacketPlayerInfo extends Packet {
 
     public String vehicleEntityType;
 
-    public List<SerializablePotionEffect> potionEffects;
+    public SerializablePotionEffect[] potionEffects;
 
     public static class SerializablePotionEffect implements Serializable {
         public String type;
         public int duration;
         public int amplifier;
+
+        @Override
+        public String toString() {
+            return "SerializablePotionEffect{" +
+                    "type='" + type + '\'' +
+                    ", duration=" + duration +
+                    ", amplifier=" + amplifier +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "PacketPlayerInfo{" +
+                "inventoryContents=" + Arrays.toString(inventoryContents) +
+                ", extraContents=" + Arrays.toString(extraContents) +
+                ", armorContents=" + Arrays.toString(armorContents) +
+                ", heldItemSlot=" + heldItemSlot +
+                ", world='" + world + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", yaw=" + yaw +
+                ", pitch=" + pitch +
+                ", displayName='" + displayName + '\'' +
+                ", fireTicks=" + fireTicks +
+                ", noDamageTicks=" + noDamageTicks +
+                ", gameMode='" + gameMode + '\'' +
+                ", maximumAir=" + maximumAir +
+                ", maximumAirNoDamageTicks=" + maximumAirNoDamageTicks +
+                ", remainingAir=" + remainingAir +
+                ", op=" + op +
+                ", fallDistance=" + fallDistance +
+                ", foodLevel=" + foodLevel +
+                ", health=" + health +
+                ", healthScale=" + healthScale +
+                ", sneaking=" + sneaking +
+                ", sprinting=" + sprinting +
+                ", experience=" + experience +
+                ", levels=" + levels +
+                ", totalExperience=" + totalExperience +
+                ", exhaustion=" + exhaustion +
+                ", saturation=" + saturation +
+                ", absorptionAmount=" + absorptionAmount +
+                ", allowFlight=" + allowFlight +
+                ", flying=" + flying +
+                ", canPickupItems=" + canPickupItems +
+                ", flySpeed=" + flySpeed +
+                ", walkSpeed=" + walkSpeed +
+                ", vehicleEntityType='" + vehicleEntityType + '\'' +
+                ", potionEffects=" + Arrays.toString(potionEffects) +
+                '}';
     }
 }

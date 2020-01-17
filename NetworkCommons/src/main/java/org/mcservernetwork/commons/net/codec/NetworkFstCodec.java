@@ -23,7 +23,7 @@ public class NetworkFstCodec implements RedisCodec<String, Packet> {
 
     @Override
     public Packet decodeValue(ByteBuffer bytes) {
-        byte[] buffer = new byte[bytes.limit()];
+        byte[] buffer = new byte[bytes.remaining()];
         bytes.get(buffer);
         return (Packet) configuration.asObject(buffer);
     }

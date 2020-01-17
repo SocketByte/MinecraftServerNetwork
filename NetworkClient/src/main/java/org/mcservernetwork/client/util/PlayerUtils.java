@@ -31,6 +31,7 @@ public class PlayerUtils {
         info.z = player.getLocation().getBlockZ();
         info.yaw = player.getLocation().getYaw();
         info.pitch = player.getLocation().getPitch();
+        info.world = player.getWorld().getName();
 
         info.allowFlight = player.getAllowFlight();
         info.displayName = player.getDisplayName();
@@ -57,7 +58,9 @@ public class PlayerUtils {
         info.noDamageTicks = player.getNoDamageTicks();
         info.heldItemSlot = player.getInventory().getHeldItemSlot();
 
-        List<PacketPlayerInfo.SerializablePotionEffect> effects = new ArrayList<>();
+        PacketPlayerInfo.SerializablePotionEffect[] effects = new PacketPlayerInfo.SerializablePotionEffect
+                [player.getActivePotionEffects().size()];
+        int i = 0;
         for (PotionEffect effect : player.getActivePotionEffects()) {
             PacketPlayerInfo.SerializablePotionEffect potionEffect =
                     new PacketPlayerInfo.SerializablePotionEffect();
@@ -66,7 +69,8 @@ public class PlayerUtils {
             potionEffect.amplifier = effect.getAmplifier();
             potionEffect.duration = effect.getDuration();
 
-            effects.add(potionEffect);
+            effects[i] = potionEffect;
+            i++;
         }
 
         info.potionEffects = effects;
@@ -82,19 +86,14 @@ public class PlayerUtils {
             System.out.println("Player " + player.getName() + " inventory was corrupted.");
         }
 
-        EntityType entityType = EntityType.valueOf(info.vehicleEntityType);
-        Entity vehicle = player.getWorld().spawnEntity(player.getLocation(), entityType);
-        vehicle.addPassenger(player);
-
-        int y = (int)info.y;
-        while (!player.getWorld().getBlockAt((int)info.x, y, (int)info.z)
-                .getType().equals(Material.AIR)) {
-            y++;
+        if (info.vehicleEntityType != null) {
+            EntityType entityType = EntityType.valueOf(info.vehicleEntityType);
+            Entity vehicle = player.getWorld().spawnEntity(player.getLocation(), entityType);
+            vehicle.addPassenger(player);
         }
 
-        Location location = new Location(Bukkit.getWorld(info.world),
-                info.x, y + 2, info.z, info.yaw, info.pitch);
-        player.teleport(location);
+        LocationUtils.teleport(player, Bukkit.getWorld(info.world),
+                (int)info.x, (int)info.z, (int)info.y, info.yaw, info.pitch);
 
         player.setAllowFlight(info.allowFlight);
         player.setDisplayName(info.displayName);
@@ -128,6 +127,7 @@ public class PlayerUtils {
             PotionEffect potionEffect = new PotionEffect(type,
                     effect.duration, effect.amplifier);
         }
+
     }
 
 }

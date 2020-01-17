@@ -1,5 +1,6 @@
 package org.mcservernetwork.proxy.listener;
 
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
@@ -20,6 +21,7 @@ public class TransferRequestListener implements NetworkAPI.Net.Listener<PacketTr
             System.out.println("Sector " + packet.targetSectorName + " not found. Bypassing request.");
             return;
         }
+        ServerInfo info = Proxy.getInstance().getProxy().getServerInfo(sector.getSectorName());
         player.connect(Proxy.getInstance().getProxy().getServerInfo(sector.getSectorName()));
 
         NetworkAPI.Net.publish(Channel.SECTOR(packet.targetSectorName), packet);
