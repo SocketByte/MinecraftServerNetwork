@@ -7,6 +7,10 @@ import java.util.List;
 
 public class BlockUtils {
 
+    /*
+     * Made by dzikoysk
+     * https://github.com/FunnyGuilds/FunnyGuilds/blob/master/src/main/java/net/dzikoysk/funnyguilds/util/commons/bukkit/SpaceUtils.java
+     */
     public static List<Location> sphere(Location loc, int radius, int height, boolean hollow, boolean sphere, int plusY) {
         List<Location> circleBlocks = new ArrayList<>();
         int explosionX = loc.getBlockX();

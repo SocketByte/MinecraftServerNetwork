@@ -1,18 +1,20 @@
 package org.mcservernetwork.client;
 
-import org.bukkit.event.EventHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcservernetwork.client.command.TestCommand;
 import org.mcservernetwork.client.listener.StatusListener;
 import org.mcservernetwork.client.listener.TransferAcceptListener;
 import org.mcservernetwork.client.listener.bukkit.PlayerMoveListener;
+import org.mcservernetwork.client.task.BorderTask;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.NetworkLogger;
 import org.mcservernetwork.commons.net.Sector;
 import org.mcservernetwork.commons.net.packet.PacketAccept;
 import org.mcservernetwork.commons.net.packet.PacketPingPong;
-import org.mcservernetwork.commons.net.packet.PacketTransferAccept;
+import org.mcservernetwork.commons.net.packet.PacketTransfer;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
@@ -25,6 +27,12 @@ public class Client extends JavaPlugin {
 
     private static String sectorName;
 
+    private static Client instance;
+
+    public static Client getInstance() {
+        return instance;
+    }
+
     public static Sector getCurrentSector() {
         return NetworkAPI.Sectors.getSector(sectorName);
     }
@@ -33,6 +41,8 @@ public class Client extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
+
         saveDefaultConfig();
         sectorName = getConfig().getString("sectorName");
 
@@ -46,7 +56,7 @@ public class Client extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
 
         NetworkAPI.Net.subscribeAndListen(Channel.PING, PacketPingPong.class, new StatusListener());
-        NetworkAPI.Net.listen(Channel.SECTOR(sectorName), PacketTransferAccept.class, new TransferAcceptListener());
+        NetworkAPI.Net.listen(Channel.SECTOR(sectorName), PacketTransfer.class, new TransferAcceptListener());
     }
 
     public void accept() {
@@ -76,11 +86,17 @@ public class Client extends JavaPlugin {
             System.out.println("Proxy did not accept the sector. Shutting down.");
             getServer().shutdown();
         }
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new BorderTask(), 0L, 3L);
     }
 
     @Override
     public void onDisable() {
+        for (BossBar bar : PlayerMoveListener.bossBars.values()) {
+            bar.removeAll();
+        }
         service.shutdown();
         NetworkAPI.Net.unsubscribe(Channel.SECTOR(sectorName));
+        NetworkAPI.Net.disconnect();
     }
 }

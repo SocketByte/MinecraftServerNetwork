@@ -1,6 +1,5 @@
 package org.mcservernetwork.proxy;
 
-import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -10,7 +9,7 @@ import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.NetworkLogger;
 import org.mcservernetwork.commons.net.packet.PacketAccept;
 import org.mcservernetwork.commons.net.packet.PacketPingPong;
-import org.mcservernetwork.commons.net.packet.PacketTransferRequest;
+import org.mcservernetwork.commons.net.packet.PacketTransfer;
 import org.mcservernetwork.proxy.command.StatusCommand;
 import org.mcservernetwork.proxy.io.ConfigReader;
 import org.mcservernetwork.proxy.io.ResourceLoader;
@@ -63,6 +62,6 @@ public class Proxy extends Plugin {
         });
 
         NetworkAPI.Net.subscribeAndListen(Channel.PONG, PacketPingPong.class, new StatusListener());
-        NetworkAPI.Net.subscribeAndListen(Channel.TRANSFER_REQUEST, PacketTransferRequest.class, new TransferRequestListener());
+        NetworkAPI.Net.subscribeAndListen(Channel.TRANSFER_REQUEST, PacketTransfer.class, new TransferRequestListener());
     }
 }

@@ -42,6 +42,11 @@ public class NetworkAPI {
             NetworkAPI.Internal.getNetwork().pubSub().sync().unsubscribe(channel);
         }
 
+        public static void disconnect() {
+            NetworkAPI.Internal.getNetwork().pubSub().close();
+            NetworkAPI.Internal.getNetwork().connection().close();
+        }
+
         @SuppressWarnings("unchecked")
         public static <T extends Packet> void subscribeAndListen(Channel channel, Class<T> type, Listener<T> listener) {
             NetworkAPI.Internal.subscribeAndListen(channel, new RedisPubSubAdapter<String, Packet>() {
