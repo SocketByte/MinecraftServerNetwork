@@ -22,7 +22,7 @@ public class TransferRequestListener implements NetworkAPI.Net.Listener<PacketTr
             return;
         }
         ServerInfo info = Proxy.getInstance().getProxy().getServerInfo(sector.getSectorName());
-        player.connect(Proxy.getInstance().getProxy().getServerInfo(sector.getSectorName()));
+        player.connect(info);
 
         NetworkAPI.Net.publish(Channel.SECTOR(packet.targetSectorName), packet);
     }

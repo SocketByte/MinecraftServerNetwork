@@ -2,7 +2,6 @@ package org.mcservernetwork.client;
 
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcservernetwork.client.command.TestCommand;
 import org.mcservernetwork.client.listener.StatusListener;
@@ -11,13 +10,14 @@ import org.mcservernetwork.client.listener.bukkit.PlayerJoinListener;
 import org.mcservernetwork.client.listener.bukkit.PlayerMoveListener;
 import org.mcservernetwork.client.listener.bukkit.PlayerTeleportListener;
 import org.mcservernetwork.client.listener.bukkit.ProtectionListeners;
+import org.mcservernetwork.client.task.ActionBarTask;
 import org.mcservernetwork.client.task.BorderTask;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.NetworkLogger;
 import org.mcservernetwork.commons.net.Sector;
 import org.mcservernetwork.commons.net.packet.PacketAccept;
-import org.mcservernetwork.commons.net.packet.PacketPingPong;
+import org.mcservernetwork.commons.net.packet.PacketStatus;
 import org.mcservernetwork.commons.net.packet.PacketTransfer;
 
 import java.util.concurrent.CountDownLatch;
@@ -63,9 +63,12 @@ public class Client extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ProtectionListeners(), this);
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new BorderTask(), 0L, 3L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ActionBarTask(), 20L, 20L);
 
-        NetworkAPI.Net.subscribeAndListen(Channel.PING, PacketPingPong.class, new StatusListener());
+        NetworkAPI.Net.subscribeAndListen(Channel.STATUS, PacketStatus.class, new StatusListener());
         NetworkAPI.Net.listen(Channel.SECTOR(sectorName), PacketTransfer.class, new TransferAcceptListener());
+
+        ClientStatusHandler.run();
     }
 
     public void accept() {

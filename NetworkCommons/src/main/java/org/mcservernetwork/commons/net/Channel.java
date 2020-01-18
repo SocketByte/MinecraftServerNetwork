@@ -5,7 +5,7 @@ public enum Channel {
     PROXY,
     LOGGER,
     TELEPORT,
-    PING, PONG,
+    STATUS,
     VERIFY;
     public static String SECTOR(String name) {
         return "SECTOR:" + name;

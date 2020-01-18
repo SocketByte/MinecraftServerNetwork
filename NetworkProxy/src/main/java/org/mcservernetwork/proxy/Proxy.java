@@ -8,12 +8,9 @@ import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.NetworkLogger;
 import org.mcservernetwork.commons.net.packet.PacketAccept;
-import org.mcservernetwork.commons.net.packet.PacketPingPong;
 import org.mcservernetwork.commons.net.packet.PacketTransfer;
-import org.mcservernetwork.proxy.command.StatusCommand;
 import org.mcservernetwork.proxy.io.ConfigReader;
 import org.mcservernetwork.proxy.io.ResourceLoader;
-import org.mcservernetwork.proxy.listener.StatusListener;
 import org.mcservernetwork.proxy.listener.TransferRequestListener;
 
 import java.io.*;
@@ -21,8 +18,8 @@ import java.io.*;
 public class Proxy extends Plugin {
 
     private static final NetworkLogger logger = new NetworkLogger("PROXY");
-    private static Configuration configuration;
 
+    private static Configuration configuration;
     private static Proxy instance;
 
     public static Proxy getInstance() {
@@ -48,11 +45,7 @@ public class Proxy extends Plugin {
         }
 
         NetworkAPI.Internal.createNetwork(configuration.getString("connectionPattern"));
-
-        getProxy().getPluginManager().registerCommand(this, new StatusCommand());
-
         logger.listen();
-
         logger.log("Loading sectors.", NetworkLogger.LogSeverity.INFO);
         ConfigReader.readSectors();
 
@@ -61,7 +54,6 @@ public class Proxy extends Plugin {
             NetworkAPI.Net.publish(Channel.SECTOR(packet.sectorName), packet);
         });
 
-        NetworkAPI.Net.subscribeAndListen(Channel.PONG, PacketPingPong.class, new StatusListener());
         NetworkAPI.Net.subscribeAndListen(Channel.TRANSFER_REQUEST, PacketTransfer.class, new TransferRequestListener());
     }
 }

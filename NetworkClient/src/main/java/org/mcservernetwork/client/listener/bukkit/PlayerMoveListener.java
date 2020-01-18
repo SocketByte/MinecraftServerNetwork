@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.mcservernetwork.client.ClientStatusHandler;
 import org.mcservernetwork.client.util.ColorUtils;
 import org.mcservernetwork.client.util.PlayerUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
@@ -16,6 +17,7 @@ import org.mcservernetwork.client.util.StringUtils;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.Sector;
+import org.mcservernetwork.commons.net.packet.PacketStatus;
 import org.mcservernetwork.commons.net.packet.PacketTransfer;
 
 import java.util.*;
@@ -68,9 +70,6 @@ public class PlayerMoveListener implements Listener {
         bossBar.setTitle(ColorUtils.fixColors("&5&l" + name
                 + " &5&l(&d&l" + Math.round(distance) + "m&5&l)"));
         bossBar.setProgress(SectorLocationUtils.progress(distance));
-
-        // Test
-        ActionBarAPI.sendActionBar(player, ColorUtils.fixColors("&4\u2716 Sector &4&l" + name + " &4is not available. \u2716"));
 
         Sector in = SectorLocationUtils.getSectorIn(location);
         if (in == null)
