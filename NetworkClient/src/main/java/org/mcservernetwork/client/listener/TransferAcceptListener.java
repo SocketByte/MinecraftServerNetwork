@@ -37,6 +37,12 @@ public class TransferAcceptListener implements NetworkAPI.Net.Listener<PacketTra
             PLAYER_FUTURES.remove(playerId);
         });
 
+        Player player = Bukkit.getPlayer(playerId);
+        if (player != null) {
+            future.complete(player);
+            return;
+        }
+
         PLAYER_FUTURES.put(playerId, future);
         service.schedule(() -> {
             CompletableFuture<Player> completableFuture = PLAYER_FUTURES.get(playerId);

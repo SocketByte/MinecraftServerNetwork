@@ -9,6 +9,8 @@ import org.mcservernetwork.client.listener.StatusListener;
 import org.mcservernetwork.client.listener.TransferAcceptListener;
 import org.mcservernetwork.client.listener.bukkit.PlayerJoinListener;
 import org.mcservernetwork.client.listener.bukkit.PlayerMoveListener;
+import org.mcservernetwork.client.listener.bukkit.PlayerTeleportListener;
+import org.mcservernetwork.client.listener.bukkit.ProtectionListeners;
 import org.mcservernetwork.client.task.BorderTask;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
@@ -57,6 +59,10 @@ public class Client extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerTeleportListener(), this);
+        getServer().getPluginManager().registerEvents(new ProtectionListeners(), this);
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new BorderTask(), 0L, 3L);
 
         NetworkAPI.Net.subscribeAndListen(Channel.PING, PacketPingPong.class, new StatusListener());
         NetworkAPI.Net.listen(Channel.SECTOR(sectorName), PacketTransfer.class, new TransferAcceptListener());
@@ -87,8 +93,6 @@ public class Client extends JavaPlugin {
             System.out.println("Proxy did not accept the sector. Shutting down.");
             getServer().shutdown();
         }
-
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new BorderTask(), 0L, 3L);
     }
 
     @Override
