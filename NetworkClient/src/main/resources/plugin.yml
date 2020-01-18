@@ -1,5 +1,6 @@
 name: NetworkClient
 version: 1.0
 main: org.mcservernetwork.client.Client
+api-version: 1.13
 commands:
   test:

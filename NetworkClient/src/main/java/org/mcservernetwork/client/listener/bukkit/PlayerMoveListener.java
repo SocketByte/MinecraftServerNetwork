@@ -41,7 +41,7 @@ public class PlayerMoveListener implements Listener {
             return;
 
         Location fromLocation = event.getFrom();
-        if (location.getBlockX() == fromLocation.getBlockX() && location.getBlockZ() == fromLocation.getBlockZ())
+        if (location.getX() == fromLocation.getX() && location.getZ() == fromLocation.getZ())
             return;
 
         double distance = SectorLocationUtils.distance(location);
@@ -58,15 +58,15 @@ public class PlayerMoveListener implements Listener {
         BossBar bossBar = BOSSBARS.get(player.getUniqueId());
         if (bossBar == null) {
             bossBar = Bukkit.createBossBar("",
-                    BarColor.GREEN, BarStyle.SOLID);
+                    BarColor.PINK, BarStyle.SOLID);
             bossBar.setVisible(true);
             bossBar.setProgress(0);
             bossBar.addPlayer(player);
             BOSSBARS.put(player.getUniqueId(), bossBar);
         }
         String name =StringUtils.capitalizeFirstLetter(nearest.getSectorName());
-        bossBar.setTitle(ColorUtils.fixColors("&2&l" + name
-                + " &2&l(&a&l" + Math.round(distance) + "m&2&l)"));
+        bossBar.setTitle(ColorUtils.fixColors("&5&l" + name
+                + " &5&l(&d&l" + Math.round(distance) + "m&5&l)"));
         bossBar.setProgress(SectorLocationUtils.progress(distance));
 
         // Test
@@ -90,7 +90,7 @@ public class PlayerMoveListener implements Listener {
         TRANSFERRING.add(player.getUniqueId());
         service.schedule(() -> {
             TRANSFERRING.remove(player.getUniqueId());
-        }, 3, TimeUnit.SECONDS);
+        }, 1, TimeUnit.SECONDS);
 
         NetworkAPI.Net.publish(Channel.TRANSFER_REQUEST, packet);
     }

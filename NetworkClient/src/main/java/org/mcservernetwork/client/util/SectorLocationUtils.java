@@ -10,7 +10,7 @@ import java.util.*;
 
 public class SectorLocationUtils {
 
-    public static final int MAX_DISTANCE = 30;
+    public static final double MAX_DISTANCE = 30.0;
 
     public static Sector getNearest(Location location) {
         int offset = 5;
@@ -40,7 +40,7 @@ public class SectorLocationUtils {
                 Math.min(Math.abs(sector.getMinX() - location.getX()),
                         Math.abs(sector.getMaxX() - location.getX())),
                 Math.min(Math.abs(sector.getMinZ() - location.getZ()),
-                        Math.abs(sector.getMaxZ() - location.getZ()))) + 1;
+                        Math.abs(sector.getMaxZ() - location.getZ()))) + 1.0;
     }
 
     public static double progress(double distance) {
