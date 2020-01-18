@@ -58,28 +58,36 @@ public class PlayerMoveListener implements Listener {
         }
 
         BossBar bossBar = BOSSBARS.get(player.getUniqueId());
+        double progress = SectorLocationUtils.progress(distance);
         if (bossBar == null) {
             bossBar = Bukkit.createBossBar("",
                     BarColor.PINK, BarStyle.SOLID);
             bossBar.setVisible(true);
-            bossBar.setProgress(0);
+            bossBar.setProgress(progress);
             bossBar.addPlayer(player);
             BOSSBARS.put(player.getUniqueId(), bossBar);
         }
-        String name =StringUtils.capitalizeFirstLetter(nearest.getSectorName());
+        String name = StringUtils.capitalizeFirstLetter(nearest.getSectorName());
         bossBar.setTitle(ColorUtils.fixColors("&5&l" + name
                 + " &5&l(&d&l" + Math.round(distance) + "m&5&l)"));
-        bossBar.setProgress(SectorLocationUtils.progress(distance));
+        bossBar.setProgress(progress);
 
         Sector in = SectorLocationUtils.getSectorIn(location);
         if (in == null)
             return;
 
+        event.getTo().setX(event.getFrom().getX());
+        event.getTo().setY(event.getFrom().getY());
+        event.getTo().setZ(event.getFrom().getZ());
+
+        if (ClientStatusHandler.get(nearest.getSectorName()) == null) {
+            player.sendMessage(ColorUtils.fixColors("&cCould not transfer to &l" + nearest.getSectorName()
+                    + "&c (Server is not responding)"));
+            return;
+        }
+
         if (TRANSFERRING.contains(player.getUniqueId()))
             return;
-
-        bossBar.removeAll();
-        BOSSBARS.remove(player.getUniqueId());
 
         PacketTransfer packet = new PacketTransfer();
         packet.targetSectorName = in.getSectorName();
@@ -87,9 +95,13 @@ public class PlayerMoveListener implements Listener {
         packet.info = PlayerUtils.wrap(player);
 
         TRANSFERRING.add(player.getUniqueId());
+
         service.schedule(() -> {
             TRANSFERRING.remove(player.getUniqueId());
         }, 1, TimeUnit.SECONDS);
+
+        bossBar.removeAll();
+        BOSSBARS.remove(player.getUniqueId());
 
         NetworkAPI.Net.publish(Channel.TRANSFER_REQUEST, packet);
     }
