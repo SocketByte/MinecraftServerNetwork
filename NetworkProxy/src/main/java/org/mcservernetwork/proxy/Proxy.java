@@ -51,7 +51,7 @@ public class Proxy extends Plugin {
 
         NetworkAPI.Net.subscribeAndListen(Channel.VERIFY, PacketAccept.class, packet -> {
             packet.sectors = NetworkAPI.Sectors.getSectors();
-            NetworkAPI.Net.publish(Channel.SECTOR(packet.sectorName), packet);
+            NetworkAPI.Net.publish(Channel.sector(packet.sectorName), packet);
         });
 
         NetworkAPI.Net.subscribeAndListen(Channel.TRANSFER_REQUEST, PacketTransfer.class, new TransferRequestListener());

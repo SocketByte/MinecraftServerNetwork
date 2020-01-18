@@ -7,7 +7,7 @@ public enum Channel {
     TELEPORT,
     STATUS,
     VERIFY;
-    public static String SECTOR(String name) {
+    public static String sector(String name) {
         return "SECTOR:" + name;
     }
 }

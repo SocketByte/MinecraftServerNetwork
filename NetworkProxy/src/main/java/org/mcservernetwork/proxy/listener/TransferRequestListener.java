@@ -1,6 +1,5 @@
 package org.mcservernetwork.proxy.listener;
 
-import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -36,6 +35,6 @@ public class TransferRequestListener implements NetworkAPI.Net.Listener<PacketTr
             }
         }, ServerConnectEvent.Reason.PLUGIN);
 
-        NetworkAPI.Net.publish(Channel.SECTOR(packet.targetSectorName), packet);
+        NetworkAPI.Net.publish(Channel.sector(packet.targetSectorName), packet);
     }
 }

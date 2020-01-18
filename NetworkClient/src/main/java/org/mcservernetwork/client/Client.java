@@ -51,7 +51,7 @@ public class Client extends JavaPlugin {
         sectorName = getConfig().getString("sectorName");
 
         NetworkAPI.Internal.createNetwork(getConfig().getString("connectionPattern"));
-        NetworkAPI.Net.subscribe(Channel.SECTOR(sectorName));
+        NetworkAPI.Net.subscribe(Channel.sector(sectorName));
 
         accept();
 
@@ -66,14 +66,14 @@ public class Client extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ActionBarTask(), 20L, 20L);
 
         NetworkAPI.Net.subscribeAndListen(Channel.STATUS, PacketStatus.class, new StatusListener());
-        NetworkAPI.Net.listen(Channel.SECTOR(sectorName), PacketTransfer.class, new TransferAcceptListener());
+        NetworkAPI.Net.listen(Channel.sector(sectorName), PacketTransfer.class, new TransferAcceptListener());
 
         ClientStatusHandler.run();
     }
 
     public void accept() {
         CountDownLatch latch = new CountDownLatch(1);
-        NetworkAPI.Net.listen(Channel.SECTOR(sectorName), PacketAccept.class, packet -> {
+        NetworkAPI.Net.listen(Channel.sector(sectorName), PacketAccept.class, packet -> {
             NetworkAPI.Internal.applySectors(packet.sectors);
             System.out.println("Proxy accepted the sector.");
             System.out.println("Connecting to network logger...");
@@ -104,7 +104,7 @@ public class Client extends JavaPlugin {
             bar.removeAll();
         }
         service.shutdown();
-        NetworkAPI.Net.unsubscribe(Channel.SECTOR(sectorName));
+        NetworkAPI.Net.unsubscribe(Channel.sector(sectorName));
         NetworkAPI.Net.disconnect();
     }
 }
