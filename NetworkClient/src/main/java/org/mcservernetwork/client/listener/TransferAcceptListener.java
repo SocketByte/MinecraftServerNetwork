@@ -6,11 +6,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.mcservernetwork.client.Client;
 import org.mcservernetwork.client.io.BukkitSerializer;
 import org.mcservernetwork.client.util.PlayerUtils;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.packet.PacketPlayerInfo;
 import org.mcservernetwork.commons.net.packet.PacketTransfer;
+import org.mcservernetwork.commons.net.packet.persist.PlayerSectorData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,11 +32,17 @@ public class TransferAcceptListener implements NetworkAPI.Net.Listener<PacketTra
         PacketPlayerInfo info = packet.info;
 
         UUID playerId = UUID.fromString(packet.uniqueId);
+        if (info == null)
+            return;
 
         CompletableFuture<Player> future = new CompletableFuture<>();
         future.thenAccept(player -> {
             PlayerUtils.unwrap(player, info);
             PLAYER_FUTURES.remove(playerId);
+
+            PlayerSectorData data = new PlayerSectorData();
+            data.currentSectorName = Client.getCurrentSector().getSectorName();
+            NetworkAPI.Net.set(player.getUniqueId().toString(), data);
         });
 
         Player player = Bukkit.getPlayer(playerId);

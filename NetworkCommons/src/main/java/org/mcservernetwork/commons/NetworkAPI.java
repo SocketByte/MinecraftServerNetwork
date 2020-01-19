@@ -1,5 +1,6 @@
 package org.mcservernetwork.commons;
 
+import io.lettuce.core.RedisFuture;
 import io.lettuce.core.pubsub.RedisPubSubAdapter;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.Network;
@@ -32,6 +33,14 @@ public class NetworkAPI {
 
         public static void publish(String channel, Packet packet) {
             NetworkAPI.Internal.publishAsync(channel, packet);
+        }
+
+        public static void set(String key, Packet data) {
+            NetworkAPI.Internal.getNetwork().connection().sync().set(key, data);
+        }
+
+        public static RedisFuture<Packet> get(String key) {
+            return NetworkAPI.Internal.getNetwork().connection().async().get(key);
         }
 
         public static void unsubscribe(Channel channel) {

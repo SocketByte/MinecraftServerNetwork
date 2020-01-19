@@ -12,7 +12,7 @@ import org.mcservernetwork.client.util.SectorLocationUtils;
 public class ProtectionListeners implements Listener {
 
     @EventHandler
-    public void onBlockBreak(BlockBurnEvent event) {
+    public void onBlockBurn(BlockBurnEvent event) {
         Location location = event.getBlock().getLocation();
 
         if (SectorLocationUtils.distance(location) <= SectorLocationUtils.MAX_DISTANCE) {

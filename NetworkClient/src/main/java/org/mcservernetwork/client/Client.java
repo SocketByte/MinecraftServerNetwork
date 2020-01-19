@@ -6,10 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcservernetwork.client.command.TestCommand;
 import org.mcservernetwork.client.listener.StatusListener;
 import org.mcservernetwork.client.listener.TransferAcceptListener;
-import org.mcservernetwork.client.listener.bukkit.PlayerJoinListener;
-import org.mcservernetwork.client.listener.bukkit.PlayerMoveListener;
-import org.mcservernetwork.client.listener.bukkit.PlayerTeleportListener;
-import org.mcservernetwork.client.listener.bukkit.ProtectionListeners;
+import org.mcservernetwork.client.listener.bukkit.*;
 import org.mcservernetwork.client.task.ActionBarTask;
 import org.mcservernetwork.client.task.BorderTask;
 import org.mcservernetwork.commons.NetworkAPI;
@@ -60,6 +57,7 @@ public class Client extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerTeleportListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         getServer().getPluginManager().registerEvents(new ProtectionListeners(), this);
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new BorderTask(), 0L, 3L);
