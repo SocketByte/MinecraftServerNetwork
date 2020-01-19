@@ -1,6 +1,7 @@
 package org.mcservernetwork.client.listener;
 
 import org.mcservernetwork.client.ClientStatusHandler;
+import org.mcservernetwork.client.util.inventory.NetworkOverviewPanel;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.packet.PacketStatus;
 

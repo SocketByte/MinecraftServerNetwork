@@ -47,6 +47,13 @@ public class SectorLocationUtils {
         return 1 - (distance / MAX_DISTANCE);
     }
 
+    public static Location getCenter(World world, int y, Sector sector) {
+        int centerX = (int) ((sector.getMinX() + sector.getMaxX()) / 2);
+        int centerZ = (int) ((sector.getMinZ() + sector.getMaxZ()) / 2);
+
+        return new Location(world, centerX, y, centerZ);
+    }
+
     public static Sector getSectorIn(Location location) {
         for (Sector sector : NetworkAPI.Sectors.getSectors().values()) {
             if (isIn(location, sector) && !sector.equals(Client.getCurrentSector()))

@@ -28,11 +28,11 @@ public class NetworkAPI {
 
     public static class Net {
         public static void publish(Channel channel, Packet packet) {
-            NetworkAPI.Internal.publishAsync(channel, packet);
+            NetworkAPI.Internal.publishSync(channel, packet);
         }
 
         public static void publish(String channel, Packet packet) {
-            NetworkAPI.Internal.publishAsync(channel, packet);
+            NetworkAPI.Internal.publishSync(channel, packet);
         }
 
         public static void set(String key, Packet data) {

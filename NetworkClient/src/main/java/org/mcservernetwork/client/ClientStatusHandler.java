@@ -43,4 +43,11 @@ public class ClientStatusHandler {
         return packet;
     }
 
+    public static long getDurationSinceLastPacket(String sectorName) {
+        PacketStatus packet = status.get(sectorName);
+        if (packet == null)
+            return -1;
+        return System.currentTimeMillis() - packet.timestamp;
+    }
+
 }
