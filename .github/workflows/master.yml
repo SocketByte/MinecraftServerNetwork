@@ -24,8 +24,8 @@ jobs:
     steps:
     - name: Make files accessible
       run: |
-        chmod +x ./NetworkClient/build/libs/NetworkClient-1.0.jar
-        chmod +x ./NetworkProxy/build/libs/NetworkProxy-1.0.jar
+        chmod +x /NetworkClient/build/libs/NetworkClient-1.0.jar
+        chmod +x /NetworkProxy/build/libs/NetworkProxy-1.0.jar
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
