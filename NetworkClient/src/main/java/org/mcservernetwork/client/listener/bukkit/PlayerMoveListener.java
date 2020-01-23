@@ -1,6 +1,5 @@
 package org.mcservernetwork.client.listener.bukkit;
 
-import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -8,9 +7,8 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.mcservernetwork.client.ClientStatusHandler;
+import org.mcservernetwork.commons.ClientStatusHandler;
 import org.mcservernetwork.client.util.ColorUtils;
 import org.mcservernetwork.client.util.PlayerUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
@@ -18,7 +16,6 @@ import org.mcservernetwork.client.util.StringUtils;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.Sector;
-import org.mcservernetwork.commons.net.packet.PacketStatus;
 import org.mcservernetwork.commons.net.packet.PacketTransfer;
 
 import java.util.*;

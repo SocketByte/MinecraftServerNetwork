@@ -4,12 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcservernetwork.client.command.NetworkCommand;
-import org.mcservernetwork.client.listener.StatusListener;
+import org.mcservernetwork.commons.listener.StatusListener;
 import org.mcservernetwork.client.listener.TransferAcceptListener;
 import org.mcservernetwork.client.listener.bukkit.*;
 import org.mcservernetwork.client.task.ActionBarTask;
 import org.mcservernetwork.client.task.BorderTask;
-import org.mcservernetwork.client.util.inventory.NetworkOverviewPanel;
+import org.mcservernetwork.client.util.TPSUtils;
+import org.mcservernetwork.commons.ClientStatusHandler;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.NetworkLogger;
@@ -69,7 +70,15 @@ public class Client extends JavaPlugin {
         NetworkAPI.Net.subscribeAndListen(Channel.STATUS, PacketStatus.class, new StatusListener());
         NetworkAPI.Net.listen(Channel.sector(sectorName), PacketTransfer.class, new TransferAcceptListener());
 
-        ClientStatusHandler.run();
+        ClientStatusHandler.run(() -> {
+            PacketStatus packet = new PacketStatus();
+            packet.sectorName = Client.getCurrentSector().getSectorName();
+            packet.players = Bukkit.getOnlinePlayers().size();
+            packet.tps = TPSUtils.getRecentTPS(0);
+            packet.timestamp = System.currentTimeMillis();
+
+            NetworkAPI.Net.publish(Channel.STATUS, packet);
+        });
     }
 
     public void accept() {
