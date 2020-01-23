@@ -11,8 +11,8 @@ dependencies {
 task copyJar {
     doLast {
         copy {
-            from "$projectDir\\build\\libs\\NetworkProxy-1.0.jar"
-            into "E:\\Sektory\\aProxy\\plugins"
+            from "$projectDir/build/libs/NetworkProxy-1.0.jar"
+            into "E:/Sektory/aProxy/plugins"
         }
     }
 }
