@@ -30,6 +30,6 @@ jobs:
         prerelease: false
         title: "Release Build"
         files: |
-          NetworkClient/build/libs/*.jar
-          NetworkProxy/build/libs/*.jar
+          NetworkClient/build/libs/NetworkClient-1.0.jar
+          NetworkProxy/build/libs/NetworkProxy-1.0.jar
     
