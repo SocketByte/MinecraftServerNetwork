@@ -1,6 +1,7 @@
 package org.mcservernetwork.proxy.listener.bungee;
 
 import io.lettuce.core.RedisFuture;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -29,11 +30,11 @@ public class ServerConnectListener implements Listener {
         data.thenAccept(packet -> {
             PlayerSectorData sectorData = (PlayerSectorData) packet;
 
-            String current = player.getServer().getInfo().getName();
+            ServerInfo current = player.getServer().getInfo();
             if (current == null)
-                current = event.getTarget().getName();
+                current = event.getTarget();
 
-            if (current.equals(sectorData.currentSectorName))
+            if (current.getName().equals(sectorData.currentSectorName))
                 return;
 
             PacketStatus status = ClientStatusHandler.get(sectorData.currentSectorName);
@@ -42,10 +43,7 @@ public class ServerConnectListener implements Listener {
                 return;
             }
 
-            PacketTransfer transfer = new PacketTransfer();
-            transfer.targetSectorName = sectorData.currentSectorName;
-            transfer.uniqueId = player.getUniqueId().toString();
-            NetworkAPI.Net.publish(Channel.TRANSFER_REQUEST, transfer);
+            player.connect(current);
         });
     }
 
