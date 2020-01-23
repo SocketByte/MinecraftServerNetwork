@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.mcservernetwork.client.ClientStatusHandler;
+import org.mcservernetwork.commons.ClientStatusHandler;
 import org.mcservernetwork.client.util.PlayerUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
 import org.mcservernetwork.client.util.StringUtils;

@@ -4,7 +4,7 @@ import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.mcservernetwork.client.ClientStatusHandler;
+import org.mcservernetwork.commons.ClientStatusHandler;
 import org.mcservernetwork.client.util.ColorUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
 import org.mcservernetwork.client.util.StringUtils;

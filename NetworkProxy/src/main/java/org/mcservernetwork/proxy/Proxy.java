@@ -5,15 +5,18 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import org.mcservernetwork.commons.NetworkAPI;
+import org.mcservernetwork.commons.listener.StatusListener;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.NetworkLogger;
 import org.mcservernetwork.commons.net.packet.PacketAccept;
+import org.mcservernetwork.commons.net.packet.PacketStatus;
 import org.mcservernetwork.commons.net.packet.PacketTransfer;
 import org.mcservernetwork.proxy.io.ConfigReader;
 import org.mcservernetwork.proxy.io.ResourceLoader;
 import org.mcservernetwork.proxy.listener.TransferRequestListener;
+import org.mcservernetwork.proxy.listener.bungee.ServerConnectListener;
 
-import java.io.*;
+import java.io.IOException;
 
 public class Proxy extends Plugin {
 
@@ -54,6 +57,9 @@ public class Proxy extends Plugin {
             NetworkAPI.Net.publish(Channel.sector(packet.sectorName), packet);
         });
 
+        NetworkAPI.Net.subscribeAndListen(Channel.STATUS, PacketStatus.class, new StatusListener());
         NetworkAPI.Net.subscribeAndListen(Channel.TRANSFER_REQUEST, PacketTransfer.class, new TransferRequestListener());
+
+        this.getProxy().getPluginManager().registerListener(this, new ServerConnectListener());
     }
 }

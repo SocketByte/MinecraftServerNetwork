@@ -1,8 +1,6 @@
 package org.mcservernetwork.commons.net;
 
-import io.lettuce.core.pubsub.RedisPubSubAdapter;
 import org.mcservernetwork.commons.NetworkAPI;
-import org.mcservernetwork.commons.net.packet.Packet;
 import org.mcservernetwork.commons.net.packet.PacketLog;
 
 public class NetworkLogger {
