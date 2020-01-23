@@ -30,11 +30,6 @@ public class TransferRequestListener implements NetworkAPI.Net.Listener<PacketTr
                 player.sendMessage(new TextComponent(
                         ColorUtils.fixColors("&dConnecting to &l" + packet.targetSectorName + "&d...")));
             } else {
-                if (packet.info == null) {
-                    player.disconnect(new TextComponent(
-                            ColorUtils.fixColors("&cCould not connect to &l" + packet.targetSectorName + "&c (Sector might be unavailable)")));
-                    return;
-                }
                 player.sendMessage(new TextComponent(
                         ColorUtils.fixColors("&cCould not connect to &l" + packet.targetSectorName + "&c (Sector might be unavailable)")));
             }

@@ -8,6 +8,11 @@ dependencies {
     compileOnly group: 'net.md-5', name: 'bungeecord-api', version: '1.15-SNAPSHOT'
 }
 
-tasks.withType(Jar) {
-    destinationDir = file("E:\\Sektory\\aProxy\\plugins\\")
+task copyJar {
+    doLast {
+        copy {
+            from "$projectDir\\build\\libs\\NetworkProxy-1.0.jar"
+            into "E:\\Sektory\\aProxy\\plugins"
+        }
+    }
 }
