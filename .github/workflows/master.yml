@@ -18,11 +18,15 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew build -x copyJar
-  devrelease:
+  release:
     runs-on: [ubuntu-latest]
     needs: [build]
     steps:
-    - name: Release Build Release
+    - name: Make files accessible
+      run: |
+        chmod +x ./NetworkClient/build/libs/NetworkClient-1.0.jar
+        chmod +x ./NetworkProxy/build/libs/NetworkProxy-1.0.jar
+    - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
