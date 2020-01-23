@@ -17,7 +17,7 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     - name: Build with Gradle
-      run: ./gradlew build -x cleanJar
+      run: ./gradlew build -x copyJar
   devrelease:
     runs-on: [ubuntu-latest]
     needs: [build]
