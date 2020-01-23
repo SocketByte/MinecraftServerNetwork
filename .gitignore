@@ -117,11 +117,7 @@ hs_err_pid*
 
 ### Gradle ###
 .gradle
-**/build/resources
-**/build/tmp
-**/build/classes
-**/build/generated
-NetworkCommons/build/
+**/build
 
 # Ignore Gradle GUI config
 gradle-app.setting
