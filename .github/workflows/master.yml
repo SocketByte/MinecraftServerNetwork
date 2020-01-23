@@ -25,4 +25,6 @@ jobs:
         automatic_release_tag: "latest"
         prerelease: false
         title: "Release Build"
-        files: "*.jar"
+        files: |
+          NetworkClient/build/libs/*.jar
+          NetworkProxy/build/libs/*.jar
