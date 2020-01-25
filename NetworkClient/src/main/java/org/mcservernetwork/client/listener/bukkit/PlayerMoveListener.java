@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.mcservernetwork.commons.ClientStatusHandler;
+import org.mcservernetwork.commons.KeepAliveHandler;
 import org.mcservernetwork.client.util.ColorUtils;
 import org.mcservernetwork.client.util.PlayerUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
@@ -78,7 +78,7 @@ public class PlayerMoveListener implements Listener {
         event.getTo().setY(event.getFrom().getY());
         event.getTo().setZ(event.getFrom().getZ());
 
-        if (ClientStatusHandler.get(nearest.getSectorName()) == null) {
+        if (KeepAliveHandler.get(nearest.getSectorName()) == null) {
             player.sendMessage(ColorUtils.fixColors("&cCould not transfer to &l" + nearest.getSectorName()
                     + "&c (Server is not responding)"));
             return;

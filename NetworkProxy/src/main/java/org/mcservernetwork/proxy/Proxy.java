@@ -15,8 +15,11 @@ import org.mcservernetwork.proxy.io.ConfigReader;
 import org.mcservernetwork.proxy.io.ResourceLoader;
 import org.mcservernetwork.proxy.listener.TransferRequestListener;
 import org.mcservernetwork.proxy.listener.bungee.ServerConnectListener;
+import org.mcservernetwork.proxy.task.TimeSyncRunner;
+import org.mcservernetwork.proxy.task.WeatherSyncRunner;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class Proxy extends Plugin {
 
@@ -56,6 +59,9 @@ public class Proxy extends Plugin {
             packet.sectors = NetworkAPI.Sectors.getSectors();
             NetworkAPI.Net.publish(Channel.sector(packet.sectorName), packet);
         });
+
+        this.getProxy().getScheduler().schedule(this, new TimeSyncRunner(), 0, 500, TimeUnit.MILLISECONDS);
+        this.getProxy().getScheduler().schedule(this, new WeatherSyncRunner(), 0, 1, TimeUnit.SECONDS);
 
         NetworkAPI.Net.subscribeAndListen(Channel.STATUS, PacketStatus.class, new StatusListener());
         NetworkAPI.Net.subscribeAndListen(Channel.TRANSFER_REQUEST, PacketTransfer.class, new TransferRequestListener());

@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.mcservernetwork.commons.ClientStatusHandler;
+import org.mcservernetwork.commons.KeepAliveHandler;
 import org.mcservernetwork.client.util.PlayerUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
 import org.mcservernetwork.client.util.StringUtils;
@@ -26,8 +26,8 @@ public class SectorInfoItem extends GUIExtenderItem {
 
     @Override
     public ItemBuilder getItemBuilder(Player player) {
-        PacketStatus status = ClientStatusHandler.get(this.sectorName);
-        long duration = ClientStatusHandler.getDurationSinceLastPacket(this.sectorName);
+        PacketStatus status = KeepAliveHandler.get(this.sectorName);
+        long duration = KeepAliveHandler.getDurationSinceLastPacket(this.sectorName);
         String name = StringUtils.capitalizeFirstLetter(this.sectorName);
         if (status == null) {
             return new ItemBuilder(Material.RED_CONCRETE)
