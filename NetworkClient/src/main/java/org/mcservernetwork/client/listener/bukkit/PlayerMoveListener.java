@@ -20,6 +20,7 @@ import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.Sector;
 import org.mcservernetwork.commons.net.packet.PacketTransfer;
+import pl.socketbyte.opengui.ColorUtil;
 
 import java.util.*;
 
@@ -80,6 +81,11 @@ public class PlayerMoveListener implements Listener {
 
         if (PlayerTransferManager.isTransferring(player))
             return;
+
+        if (!PlayerTransferManager.canTransfer(player)) {
+            player.sendMessage(ColorUtils.fixColors("&cYou are too fast! Slow down a little."));
+            return;
+        }
 
         PacketTransfer packet = new PacketTransfer();
         packet.targetSectorName = in.getSectorName();
