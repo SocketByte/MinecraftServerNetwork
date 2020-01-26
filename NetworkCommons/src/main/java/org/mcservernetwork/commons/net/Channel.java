@@ -5,6 +5,8 @@ public enum Channel {
     PROXY,
     LOGGER,
     STATUS,
+    TIME_SYNC,
+    WEATHER_SYNC,
     VERIFY;
     public static String sector(String name) {
         return "SECTOR:" + name;

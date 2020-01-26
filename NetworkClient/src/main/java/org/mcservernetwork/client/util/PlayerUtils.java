@@ -23,6 +23,7 @@ public class PlayerUtils {
         info.inventoryContents = BukkitSerializer.serializeItems(player.getInventory().getContents());
         info.extraContents = BukkitSerializer.serializeItems(player.getInventory().getExtraContents());
         info.armorContents = BukkitSerializer.serializeItems(player.getInventory().getArmorContents());
+        info.enderContents = BukkitSerializer.serializeItems(player.getEnderChest().getContents());
 
         info.vehicleEntityType = player.getVehicle() == null ? null : player.getVehicle().getType().toString();
 
@@ -82,6 +83,7 @@ public class PlayerUtils {
             player.getInventory().setContents(BukkitSerializer.deserializeItems(info.inventoryContents));
             player.getInventory().setExtraContents(BukkitSerializer.deserializeItems(info.extraContents));
             player.getInventory().setArmorContents(BukkitSerializer.deserializeItems(info.armorContents));
+            player.getEnderChest().setContents(BukkitSerializer.deserializeItems(info.enderContents));
         } catch (RuntimeException e) {
             System.out.println("Player " + player.getName() + " inventory was corrupted.");
         }

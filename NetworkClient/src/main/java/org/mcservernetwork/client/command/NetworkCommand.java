@@ -5,7 +5,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mcservernetwork.client.util.inventory.NetworkOverviewPanel;
-import org.mcservernetwork.commons.io.DeepSerializationFormat;
 
 public class NetworkCommand implements CommandExecutor {
     @Override

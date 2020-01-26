@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.mcservernetwork.client.util.ColorUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
+import org.mcservernetwork.client.util.manager.PlayerTransferManager;
 
 public class ProtectionListeners implements Listener {
 
@@ -17,7 +18,7 @@ public class ProtectionListeners implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (PlayerMoveListener.TRANSFERRING.contains(player.getUniqueId())) {
+            if (PlayerTransferManager.isTransferring(player)) {
                 event.setCancelled(true);
             }
         }
@@ -27,7 +28,7 @@ public class ProtectionListeners implements Listener {
     public void onEntityDamageByBlock(EntityDamageByBlockEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (PlayerMoveListener.TRANSFERRING.contains(player.getUniqueId())) {
+            if (PlayerTransferManager.isTransferring(player)) {
                 event.setCancelled(true);
             }
         }

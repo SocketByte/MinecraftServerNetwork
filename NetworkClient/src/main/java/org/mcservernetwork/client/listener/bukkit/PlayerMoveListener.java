@@ -1,6 +1,7 @@
 package org.mcservernetwork.client.listener.bukkit;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -8,30 +9,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.mcservernetwork.commons.ClientStatusHandler;
+import org.mcservernetwork.client.Client;
 import org.mcservernetwork.client.util.ColorUtils;
 import org.mcservernetwork.client.util.PlayerUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
 import org.mcservernetwork.client.util.StringUtils;
+import org.mcservernetwork.client.util.manager.PlayerTransferManager;
+import org.mcservernetwork.commons.KeepAliveHandler;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.Sector;
 import org.mcservernetwork.commons.net.packet.PacketTransfer;
+import pl.socketbyte.opengui.ColorUtil;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class PlayerMoveListener implements Listener {
 
     public static final Map<UUID, BossBar> BOSSBARS = new WeakHashMap<>();
-    public static final Set<UUID> TRANSFERRING = new HashSet<>();
-
-    private final Map<UUID, Set<Location>> changedBlocks = new ConcurrentHashMap<>();
-
-    private static final ScheduledExecutorService service = Executors.newScheduledThreadPool(4);
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -78,25 +73,26 @@ public class PlayerMoveListener implements Listener {
         event.getTo().setY(event.getFrom().getY());
         event.getTo().setZ(event.getFrom().getZ());
 
-        if (ClientStatusHandler.get(nearest.getSectorName()) == null) {
+        if (KeepAliveHandler.get(nearest.getSectorName()) == null) {
             player.sendMessage(ColorUtils.fixColors("&cCould not transfer to &l" + nearest.getSectorName()
                     + "&c (Server is not responding)"));
             return;
         }
 
-        if (TRANSFERRING.contains(player.getUniqueId()))
+        if (PlayerTransferManager.isTransferring(player))
             return;
+
+        if (!PlayerTransferManager.canTransfer(player)) {
+            player.sendMessage(ColorUtils.fixColors("&cYou are too fast! Slow down a little."));
+            return;
+        }
 
         PacketTransfer packet = new PacketTransfer();
         packet.targetSectorName = in.getSectorName();
         packet.uniqueId = player.getUniqueId().toString();
         packet.info = PlayerUtils.wrap(player);
 
-        TRANSFERRING.add(player.getUniqueId());
-
-        service.schedule(() -> {
-            TRANSFERRING.remove(player.getUniqueId());
-        }, 1, TimeUnit.SECONDS);
+        PlayerTransferManager.setTransferring(player);
 
         bossBar.removeAll();
         BOSSBARS.remove(player.getUniqueId());

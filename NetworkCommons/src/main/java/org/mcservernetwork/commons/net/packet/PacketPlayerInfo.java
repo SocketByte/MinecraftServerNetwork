@@ -9,6 +9,7 @@ public class PacketPlayerInfo extends Packet {
     public byte[] inventoryContents;
     public byte[] extraContents;
     public byte[] armorContents;
+    public byte[] enderContents;
 
     public int heldItemSlot;
 

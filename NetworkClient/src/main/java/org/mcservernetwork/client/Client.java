@@ -4,20 +4,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcservernetwork.client.command.NetworkCommand;
+import org.mcservernetwork.client.listener.TimeSyncListener;
+import org.mcservernetwork.client.listener.WeatherSyncListener;
 import org.mcservernetwork.commons.listener.StatusListener;
 import org.mcservernetwork.client.listener.TransferAcceptListener;
 import org.mcservernetwork.client.listener.bukkit.*;
 import org.mcservernetwork.client.task.ActionBarTask;
 import org.mcservernetwork.client.task.BorderTask;
 import org.mcservernetwork.client.util.TPSUtils;
-import org.mcservernetwork.commons.ClientStatusHandler;
+import org.mcservernetwork.commons.KeepAliveHandler;
 import org.mcservernetwork.commons.NetworkAPI;
 import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.NetworkLogger;
 import org.mcservernetwork.commons.net.Sector;
-import org.mcservernetwork.commons.net.packet.PacketAccept;
-import org.mcservernetwork.commons.net.packet.PacketStatus;
-import org.mcservernetwork.commons.net.packet.PacketTransfer;
+import org.mcservernetwork.commons.net.packet.*;
+import org.mcservernetwork.commons.service.Service;
 import pl.socketbyte.opengui.OpenGUI;
 
 import java.util.concurrent.CountDownLatch;
@@ -41,8 +42,6 @@ public class Client extends JavaPlugin {
         return NetworkAPI.Sectors.getSector(sectorName);
     }
 
-    private ScheduledExecutorService service = Executors.newScheduledThreadPool(4);
-
     @Override
     public void onEnable() {
         instance = this;
@@ -61,6 +60,7 @@ public class Client extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerTeleportListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerPortalListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         getServer().getPluginManager().registerEvents(new ProtectionListeners(), this);
 
@@ -68,9 +68,11 @@ public class Client extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ActionBarTask(), 20L, 20L);
 
         NetworkAPI.Net.subscribeAndListen(Channel.STATUS, PacketStatus.class, new StatusListener());
+        NetworkAPI.Net.subscribeAndListen(Channel.WEATHER_SYNC, PacketWeatherSync.class, new WeatherSyncListener());
+        NetworkAPI.Net.subscribeAndListen(Channel.TIME_SYNC, PacketTimeSync.class, new TimeSyncListener());
         NetworkAPI.Net.listen(Channel.sector(sectorName), PacketTransfer.class, new TransferAcceptListener());
 
-        ClientStatusHandler.run(() -> {
+        KeepAliveHandler.run(() -> {
             PacketStatus packet = new PacketStatus();
             packet.sectorName = Client.getCurrentSector().getSectorName();
             packet.players = Bukkit.getOnlinePlayers().size();
@@ -113,7 +115,7 @@ public class Client extends JavaPlugin {
         for (BossBar bar : PlayerMoveListener.BOSSBARS.values()) {
             bar.removeAll();
         }
-        service.shutdown();
+        Service.shutdown();
         NetworkAPI.Net.unsubscribe(Channel.sector(sectorName));
         NetworkAPI.Net.disconnect();
     }

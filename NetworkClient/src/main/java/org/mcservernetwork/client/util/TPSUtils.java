@@ -35,7 +35,7 @@ public class TPSUtils {
 
     public static String getRecentTPS(int last) {
         try {
-            return tpsField != null ? FORMAT.format(Math.min(20.0D, ((double[]) tpsField.get(serverInstance))[last])) : "N/A";
+            return tpsField != null ? FORMAT.format(Math.min(20.0, ((double[]) tpsField.get(serverInstance))[last])) : "?";
         }
         catch (IllegalAccessException ex) {
             return "?";

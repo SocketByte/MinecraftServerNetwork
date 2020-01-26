@@ -4,9 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.mcservernetwork.client.listener.TransferAcceptListener;
-
-import java.util.concurrent.CompletableFuture;
+import org.mcservernetwork.client.util.manager.PlayerTransferManager;
 
 public class PlayerJoinListener implements Listener {
 
@@ -14,10 +12,9 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        CompletableFuture<Player> future = TransferAcceptListener.PLAYER_FUTURES.get(player.getUniqueId());
-        if (future != null) {
+        if (PlayerTransferManager.getProvider()
+                .complete(player.getUniqueId(), player)) {
             event.setJoinMessage(null);
-            future.complete(player);
         }
     }
 

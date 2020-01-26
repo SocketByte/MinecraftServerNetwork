@@ -4,7 +4,7 @@ import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.mcservernetwork.commons.ClientStatusHandler;
+import org.mcservernetwork.commons.KeepAliveHandler;
 import org.mcservernetwork.client.util.ColorUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
 import org.mcservernetwork.client.util.StringUtils;
@@ -23,7 +23,7 @@ public class ActionBarTask implements Runnable {
                 continue;
             }
             String name = StringUtils.capitalizeFirstLetter(nearest.getSectorName());
-            PacketStatus status = ClientStatusHandler.get(nearest.getSectorName());
+            PacketStatus status = KeepAliveHandler.get(nearest.getSectorName());
             if (status == null) {
                 ActionBarAPI.sendActionBar(player,
                         ColorUtils.fixColors("&4\u2716 Sector &4&l" + name + " &4is not responding. \u2716"));
