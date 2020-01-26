@@ -2,8 +2,6 @@ package org.mcservernetwork.commons.future;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 public class TrackedFutureProvider<I, V> {
 
