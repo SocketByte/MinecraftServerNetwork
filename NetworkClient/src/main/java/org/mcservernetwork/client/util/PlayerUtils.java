@@ -66,7 +66,7 @@ public class PlayerUtils {
             PacketPlayerInfo.SerializablePotionEffect potionEffect =
                     new PacketPlayerInfo.SerializablePotionEffect();
 
-            potionEffect.type = effect.getType().toString();
+            potionEffect.type = effect.getType().getName();
             potionEffect.amplifier = effect.getAmplifier();
             potionEffect.duration = effect.getDuration();
 
@@ -122,12 +122,18 @@ public class PlayerUtils {
         player.setNoDamageTicks(info.noDamageTicks);
         player.getInventory().setHeldItemSlot(info.heldItemSlot);
 
+        for (PotionEffect effect : player.getActivePotionEffects())
+            player.removePotionEffect(effect.getType());
+
         for (PacketPlayerInfo.SerializablePotionEffect effect : info.potionEffects) {
             PotionEffectType type = PotionEffectType.getByName(effect.type);
             if (type == null)
                 continue;
+
             PotionEffect potionEffect = new PotionEffect(type,
                     effect.duration, effect.amplifier);
+
+            player.addPotionEffect(potionEffect);
         }
 
     }
