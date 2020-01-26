@@ -9,6 +9,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.mcservernetwork.client.Client;
 import org.mcservernetwork.client.io.BukkitSerializer;
 import org.mcservernetwork.commons.net.packet.PacketPlayerInfo;
 
@@ -25,7 +26,7 @@ public class PlayerUtils {
         info.armorContents = BukkitSerializer.serializeItems(player.getInventory().getArmorContents());
         info.enderContents = BukkitSerializer.serializeItems(player.getEnderChest().getContents());
 
-        info.vehicleEntityType = player.getVehicle() == null ? null : player.getVehicle().getType().toString();
+        info.vehicleEntityType = player.getVehicle() != null ? player.getVehicle().getType().name() : null;
 
         info.x = player.getLocation().getBlockX();
         info.y = player.getLocation().getBlockY();
@@ -90,8 +91,11 @@ public class PlayerUtils {
 
         if (info.vehicleEntityType != null) {
             EntityType entityType = EntityType.valueOf(info.vehicleEntityType);
-            Entity vehicle = player.getWorld().spawnEntity(player.getLocation(), entityType);
-            vehicle.addPassenger(player);
+
+            Bukkit.getScheduler().runTaskLater(Client.getInstance(), () -> {
+                Entity vehicle = player.getWorld().spawnEntity(player.getLocation(), entityType);
+                vehicle.addPassenger(player);
+            }, 15);
         }
 
         LocationUtils.teleport(player, Bukkit.getWorld(info.world),

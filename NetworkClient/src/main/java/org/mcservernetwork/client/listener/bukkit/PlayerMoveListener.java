@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -96,6 +97,12 @@ public class PlayerMoveListener implements Listener {
 
         bossBar.removeAll();
         BOSSBARS.remove(player.getUniqueId());
+
+        Entity vehicle = player.getVehicle();
+
+        if (vehicle != null) {
+            vehicle.remove();
+        }
 
         NetworkAPI.Net.publish(Channel.TRANSFER_REQUEST, packet);
     }
