@@ -18,6 +18,7 @@ import org.mcservernetwork.commons.net.Channel;
 import org.mcservernetwork.commons.net.NetworkLogger;
 import org.mcservernetwork.commons.net.Sector;
 import org.mcservernetwork.commons.net.packet.*;
+import org.mcservernetwork.commons.service.Service;
 import pl.socketbyte.opengui.OpenGUI;
 
 import java.util.concurrent.CountDownLatch;
@@ -40,8 +41,6 @@ public class Client extends JavaPlugin {
     public static Sector getCurrentSector() {
         return NetworkAPI.Sectors.getSector(sectorName);
     }
-
-    private ScheduledExecutorService service = Executors.newScheduledThreadPool(4);
 
     @Override
     public void onEnable() {
@@ -115,7 +114,7 @@ public class Client extends JavaPlugin {
         for (BossBar bar : PlayerMoveListener.BOSSBARS.values()) {
             bar.removeAll();
         }
-        service.shutdown();
+        Service.shutdown();
         NetworkAPI.Net.unsubscribe(Channel.sector(sectorName));
         NetworkAPI.Net.disconnect();
     }
