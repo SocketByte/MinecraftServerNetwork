@@ -12,6 +12,10 @@ public class Network {
 
     private static final NetworkFstCodec codec = new NetworkFstCodec();
 
+    static {
+        codec.registerAll();
+    }
+
     private final RedisClient client;
     private final StatefulRedisPubSubConnection<String, Packet> pubSub;
     private final StatefulRedisConnection<String, Packet> connection;
