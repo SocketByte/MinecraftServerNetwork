@@ -1,4 +1,6 @@
 connectionPattern: "redis://password@localhost:6379/0"
+configuration:
+  transfer-delay-time: 4000
 sectors:
   center: # Same as in BungeeCord's config.yml file
     min:

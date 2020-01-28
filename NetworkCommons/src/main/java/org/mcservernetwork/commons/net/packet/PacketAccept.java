@@ -9,5 +9,6 @@ public class PacketAccept extends Packet {
     public String sectorName;
 
     public Map<String, Sector> sectors;
+    public Map<String, Object> configuration;
 
 }

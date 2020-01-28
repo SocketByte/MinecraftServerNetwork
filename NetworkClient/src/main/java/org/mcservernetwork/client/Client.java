@@ -89,6 +89,7 @@ public class Client extends JavaPlugin {
             NetworkAPI.Internal.applySectors(packet.sectors);
             System.out.println("Proxy accepted the sector.");
             System.out.println("Connecting to network logger...");
+            Configuration.set(packet.configuration);
             logger = new NetworkLogger("SECTOR:" + packet.sectorName);
             logger.log("Connected and ready.", NetworkLogger.LogSeverity.INFO);
             latch.countDown();

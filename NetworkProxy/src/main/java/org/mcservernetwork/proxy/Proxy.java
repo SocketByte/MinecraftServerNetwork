@@ -19,6 +19,7 @@ import org.mcservernetwork.proxy.task.TimeSyncRunner;
 import org.mcservernetwork.proxy.task.WeatherSyncRunner;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Proxy extends Plugin {
@@ -26,6 +27,7 @@ public class Proxy extends Plugin {
     private static final NetworkLogger logger = new NetworkLogger("PROXY");
 
     private static Configuration configuration;
+    private static Map<String, Object> configurationMap;
     private static Proxy instance;
 
     public static Proxy getInstance() {
@@ -54,9 +56,11 @@ public class Proxy extends Plugin {
         logger.listen();
         logger.log("Loading sectors.", NetworkLogger.LogSeverity.INFO);
         ConfigReader.readSectors();
+        configurationMap = ConfigReader.readConfiguration();
 
         NetworkAPI.Net.subscribeAndListen(Channel.VERIFY, PacketAccept.class, packet -> {
             packet.sectors = NetworkAPI.Sectors.getSectors();
+            packet.configuration = configurationMap;
             NetworkAPI.Net.publish(Channel.sector(packet.sectorName), packet);
         });
 

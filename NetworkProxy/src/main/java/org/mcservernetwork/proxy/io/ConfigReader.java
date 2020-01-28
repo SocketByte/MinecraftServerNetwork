@@ -6,9 +6,24 @@ import org.mcservernetwork.commons.net.NetworkLogger;
 import org.mcservernetwork.commons.net.Sector;
 import org.mcservernetwork.proxy.Proxy;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigReader {
+
+    public static Map<String, Object> readConfiguration() {
+        Map<String, Object> confMap = new HashMap<>();
+        Configuration configuration = Proxy.getConfiguration();
+
+        Configuration confSection = configuration.getSection("configuration");
+        for (String key : confSection.getKeys()) {
+            Object object = configuration.get(key);
+
+            confMap.put(key, object);
+        }
+
+        return confMap;
+    }
 
     public static void readSectors() {
         Configuration configuration = Proxy.getConfiguration();
