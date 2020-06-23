@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.mcservernetwork.client.Client;
+import org.mcservernetwork.client.event.PlayerTransferEvent;
 import org.mcservernetwork.client.util.ColorUtils;
 import org.mcservernetwork.client.util.PlayerUtils;
 import org.mcservernetwork.client.util.SectorLocationUtils;
@@ -85,6 +86,13 @@ public class PlayerMoveListener implements Listener {
 
         if (!PlayerTransferManager.canTransfer(player)) {
             player.sendMessage(ColorUtils.fixColors("&cYou are too fast! Slow down a little."));
+            return;
+        }
+
+        PlayerTransferEvent e = new PlayerTransferEvent(fromLocation, location, in, player);
+        Bukkit.getPluginManager().callEvent(e);
+
+        if(e.isCancelled()){
             return;
         }
 
