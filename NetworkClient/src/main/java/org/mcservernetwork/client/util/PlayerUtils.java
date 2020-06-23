@@ -19,6 +19,10 @@ import java.util.List;
 public class PlayerUtils {
 
     public static PacketPlayerInfo wrap(Player player) {
+        return wrap(player, player.getLocation());
+    }
+
+    public static PacketPlayerInfo wrap(Player player, Location location) {
         PacketPlayerInfo info = new PacketPlayerInfo();
 
         info.inventoryContents = BukkitSerializer.serializeItems(player.getInventory().getContents());
@@ -28,12 +32,12 @@ public class PlayerUtils {
 
         info.vehicleEntityType = player.getVehicle() != null ? player.getVehicle().getType().name() : null;
 
-        info.x = player.getLocation().getBlockX();
-        info.y = player.getLocation().getBlockY();
-        info.z = player.getLocation().getBlockZ();
-        info.yaw = player.getLocation().getYaw();
-        info.pitch = player.getLocation().getPitch();
-        info.world = player.getWorld().getName();
+        info.x = location.getBlockX();
+        info.y = location.getBlockY();
+        info.z = location.getBlockZ();
+        info.yaw = location.getYaw();
+        info.pitch = location.getPitch();
+        info.world = location.getWorld().getName();
 
         info.allowFlight = player.getAllowFlight();
         info.displayName = player.getDisplayName();
